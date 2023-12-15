@@ -1,0 +1,27 @@
+varnishtest "our first agent and specification block"
+
+# varnishtest is centered around agents that will perform tasks independently.
+# those tasks are defined in specification strings that look like code blocks
+# thanks to the {} multi-line quirk
+
+# let's start easy with a server that just receives a request and sends back a
+# response. The name of the server must start with an "s" (in general, agent
+# names start with the first letter of the agent type)
+server s1 {
+	# receive request
+	rxreq
+	# transmit response
+	txresp -status 200 -hdr "connection: close" -hdr "beep: boop" -body "Father\n"
+}
+
+# note that this above doesn't actually start the server, it mereley defines it
+# we can start the server like this
+server s1 -start
+
+# then, we can ask s1 to wait, and the call will only return once the spec is
+# executed
+server s1 -wait
+
+# run "varnishtest basic-003.vtc" and in another terminal, run
+#     curl -v $(ss -plunt | awk '/varnishtest/ {print $5; exit}')
+# to send a request to s1

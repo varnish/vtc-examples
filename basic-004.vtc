@@ -1,0 +1,21 @@
+varnishtest "We need to talk about macro"
+
+# let's get a server with an empty spec. We don't really care about what it
+# does, but more about its existence
+
+server s1 -start
+
+# run "varnishtest basic-004.vtc" and observe all the lines with "macro" and
+# extmacro
+# we can use this macro, for example in a shell script:
+shell {
+	echo "we are running from ${pwd}, with s1 is listening on ${s1_sock}"
+	# this shell script runs with "set -e", meaning that if a command
+	# returns with a non-zero code, it will exit with an error, which
+	# will fail the test.
+	# Case in point:
+	false
+}
+
+# you can make the test pass by changing "false" to "true", or removing the
+# line altogether

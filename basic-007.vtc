@@ -1,0 +1,58 @@
+varnishtest "it's time to introduce varnish"
+
+# let's go crazy and have 2 (TWO!!) servers!
+server s1 {
+	rxreq
+	expect req.url == "/to_s1"
+	txresp
+} -start
+
+server s2 {
+	rxreq
+	expect req.url == "/to_s2"
+	txresp
+} -start
+
+# here's the star of the show, the varnish agent
+varnish v1 -vcl {
+	# pretty cool, we don't explicitly need the "vcl 4.1;" line
+	backend s1 {
+		.host = "${s1_addr}";
+		.port = "${s1_port}";
+	}
+
+	# did you know you could specify .host as "HOST:PORT"?
+	backend s2 { .host = "${s2_sock}"; }
+
+	sub vcl_recv {
+		if (req.url == "/to_s1") {
+			set req.backend_hint = s1;
+		} else {
+			set req.backend_hint = s2;
+		}
+	}
+} -start
+
+client c1 -connect ${v1_sock} {
+	txreq -url "/to_s1"
+	rxresp
+	expect resp.http.server == "s1"
+
+	txreq -url "/to_s2"
+	rxresp
+	expect resp.http.server == "s2"
+} -run
+
+# if we have two servers, we need two clients, obviously
+# even though, there's no suspense, since the data is cached 
+client c1 -connect ${v1_sock} {
+	txreq -url "/to_s1"
+	rxresp
+	expect resp.http.server == "s1"
+
+	txreq -url "/to_s2"
+	rxresp
+	expect resp.http.server == "s2"
+} -run
+
+# check that "varnishtest basic-007.vtc" passes
