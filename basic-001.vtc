@@ -1,8 +1,0 @@
-# lines starting with a # are comment, they are ignored by varnishtest,
-# same as empty lines
-
-# every vtc MUST start with a "varnishtest DESCRIPTION" line
-
-varnishtest "This does nothing"
-
-# you can run this using "varnishtest basic-001.vtc" and confirm is passes

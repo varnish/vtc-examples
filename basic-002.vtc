@@ -1,8 +1,0 @@
-# let's start with a weird syntax quirk: while we use quotes for single-line
-# strings, we can use {} for multi-line strings
-varnishtest {this looks
-weird
-right}
-
-# run that test with "varnistest -v basic-002.vtc" to confirm the
-# multi-line-ness of the title
