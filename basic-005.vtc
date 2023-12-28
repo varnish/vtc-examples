@@ -1,0 +1,38 @@
+varnishtest "Connecting a client to a server"
+
+server s1 {
+	rxreq
+	txresp
+
+	rxreq
+	txresp
+} -start
+
+# since we know how to:
+# - start a server on a dynamic port
+# - use a macro to know that dynamic port
+# - run a script
+# we can start building a bunch of tests!
+# but we probably should the client agent now, to simplify things:
+client c1 -connect ${s1_sock} {
+	# Transmit request
+	txreq -url "/foo" -hdr "something: anything"
+	# Receive response
+	rxresp
+
+	# interesting, we don't need to quote single words, but we usually
+	# do it for consistency
+	txreq -url /bar_and_maybe_baz
+	rxresp
+} -run
+
+# note that we are using "-run", that's a shorthand for "-start -wait",
+# in other words, we block until c1 is done with it sequence
+
+# ah, and since we introduced "-connect":
+client c2 -connect example.com {
+	txreq
+	rxresp
+} -run
+
+# "varnishtest basic-005.vtc" should pass without a hitch
