@@ -14,6 +14,7 @@ shell {
 	# returns with a non-zero code, it will exit with an error, which
 	# will fail the test.
 	# Case in point:
+	echo "about to run the false command"
 	false
 }
 
