@@ -8,7 +8,7 @@ server s1 {
 	expect req.http.something == "anything"
 
 	# be aware: if you try to set the body before the headers, s1 will fail
-	txresp -status 123 -hdr "x: 17.4" -body "tadaaaaaaaaaaaa"
+	txresp -status 123 -hdr "x: 17.4" -body "tadaaa"
 
 	# by the way, I can also read `req.* later, as long as I haven't
 	# received a new one
@@ -28,7 +28,7 @@ client c1 -connect ${s1_sock} {
 	# strings that look like a number can be numerically tested
 	expect resp.http.x > 17
 	expect resp.http.x <= 17.5
-	expect resp.body == "tadaaaaaaaaaaa"
+	expect resp.body == "tadaa"
 	# we use <undef> for "without a value"
 	expect resp.http.x == <undef>
 } -run
