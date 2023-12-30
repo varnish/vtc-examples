@@ -28,9 +28,9 @@ client c1 -connect ${s1_sock} {
 	# strings that look like a number can be numerically tested
 	expect resp.http.x > 17
 	expect resp.http.x <= 17.5
-	expect resp.body == "tadaa"
+	expect resp.body == "tadaaa"
 	# we use <undef> for "without a value"
-	expect resp.http.x == <undef>
+	expect resp.http.y == <undef>
 } -run
 
 # verify that "varnishtest basic-006.vtc" fails, figure out why by looking for
