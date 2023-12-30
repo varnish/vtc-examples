@@ -4,21 +4,20 @@ varnishtest "Hope for the best, expect the worst"
 # othern make sure that they contain the right data, enter the "expect" keyword
 server s1 {
 	rxreq
-	expect req.method == "SOMETHING_CRAZY"
 	expect req.url == "/foo"
 	expect req.http.something == "anything"
+
 	# be aware: if you try to set the body before the headers, s1 will fail
 	txresp -status 123 -hdr "x: 17.4" -body "tadaaaaaaaaaaaa"
+
 	# by the way, I can also read `req.* later, as long as I haven't
 	# received a new one
 	expect req.body == "greek god"
-
 } -start
 
 client c1 -connect ${s1_sock} {
 	# oh, look! Line continuations!
 	txreq \
-		-method "SOMETHING_CRAZY" \
 		-url "/foo" \
 		-hdr "something: anything" \
 		-body "greek god"
@@ -30,6 +29,8 @@ client c1 -connect ${s1_sock} {
 	expect resp.http.x > 17
 	expect resp.http.x <= 17.5
 	expect resp.body == "tadaaaaaaaaaaa"
+	# we use <undef> for "without a value"
+	expect resp.http.x == <undef>
 } -run
 
 # verify that "varnishtest basic-006.vtc" fails, figure out why by looking for
