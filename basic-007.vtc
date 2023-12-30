@@ -4,13 +4,13 @@ varnishtest "it's time to introduce varnish"
 server s1 {
 	rxreq
 	expect req.url == "/to_s1"
-	txresp
+	txresp -hdr "server: s1"
 } -start
 
 server s2 {
 	rxreq
 	expect req.url == "/to_s2"
-	txresp
+	txresp -hdr "server: s1"
 } -start
 
 # here's the star of the show, the varnish agent
