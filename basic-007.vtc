@@ -10,7 +10,7 @@ server s1 {
 server s2 {
 	rxreq
 	expect req.url == "/to_s2"
-	txresp -hdr "server: s1"
+	txresp -hdr "server: s2"
 } -start
 
 # here's the star of the show, the varnish agent
