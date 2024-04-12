@@ -28,7 +28,7 @@ client c1 -connect ${s1_sock} {
 # in other words, we block until c1 is done with it spec
 
 # ah, and since we introduced "-connect":
-client c2 -connect example.com {
+client c2 -connect "example.com 80" {
 	txreq
 	rxresp
 } -run
