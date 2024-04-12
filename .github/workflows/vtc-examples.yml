@@ -26,5 +26,5 @@ jobs:
                Pin: origin "packagecloud.io"
                Pin-Priority: 999
           EOF
+          sudo mv /tmp/pref /etc/apt/preferences.d/varnish
           varnishtest *.vtc
-
