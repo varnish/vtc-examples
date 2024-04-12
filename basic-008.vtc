@@ -4,7 +4,7 @@ varnishtest "Can we be lazier? And also do more work?"
 server s1 -repeat 2 {
 	rxreq
 	expect req.url == "/to_s1"
-	txresp
+	txresp -hdr "server: s1"
 } -start
 
 # ...or a subsection of it
@@ -12,7 +12,7 @@ server s2 {
 	loop 2 {
 		rxreq
 		expect req.url == "/to_s2"
-		txresp
+		txresp -hdr "server: s2"
 	}
 } -start
 
