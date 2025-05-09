@@ -13,7 +13,7 @@ server s1 {
 # - use a macro to know that dynamic port
 # - run a script
 # we can start building a bunch of tests!
-# but we probably should the client agent now, to simplify things:
+# but we probably should introduce the client agent now, to simplify things:
 client c1 -connect ${s1_sock} {
 	txreq -url "/foo" -hdr "something: anything"
 	rxresp
